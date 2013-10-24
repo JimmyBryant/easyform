@@ -43,6 +43,11 @@ easyform
             }
         }
     });
+####校验完成后执行回调函数
+    $('form').easyform({
+        submitButton : '.submit-button',
+        callback : function(){alert('easy to validate form');} 
+    });
 ####某种特殊情况下，你想取消对某一项内容的校验
     var easyform = $('form').easyform({
         fields : ['#input-email','.input-password','#input-title'] //使用element的id或者className
