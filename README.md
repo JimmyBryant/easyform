@@ -14,10 +14,10 @@ easyform
     <script src="js/jquery.easyform.js"></script>
 ####最基本的用法
     $('form').easyform();
-在表单submit的时候easyform会自动校验form内所有的输入框以及下拉列表是否为空
+在表单submit的时候easyform会自动校验form内所有的输入框、fileupload、textArea以及下拉列表是否为空
 ####自己选择什么时候开始表单校验
     $('form').easyform({
-        submitButton : $('.submit-button')  //当点击button时校验表单
+        submitButton : '.submit-button'  //当点击button时校验表单
     });
 ####如果你想自己指定校验哪些内容
     $('form').easyform({
@@ -36,19 +36,19 @@ easyform
             '#input-password' : {
                 required : '请输入密码'，
                 mypassword : {  //自定义校验
-                    test : /^[\w]{5,16}$/, 
+                    test : /^[\w]{8,16}$/, 
                     message : '密码长度为8-16'
                 }
                 
             }
         }
     });
-####某种特殊情况下，你想取消对某一项内容的验证
+####某种特殊情况下，你想取消对某一项内容的校验
     var easyform = $('form').easyform({
         fields : ['#input-email','.input-password','#input-title'] //使用element的id或者className
     });
     easyform.removeFields('#input-title');
-####又或者，你想对某些内容添加验证
+####又或者神马情况下，你想增加对某些内容的校验
     var easyform = $('form').easyform({
     });
     easyform.addFields({
@@ -68,5 +68,5 @@ easyform
                 
             }
     });
-    easyform.addFields('#input-title');
+    easyform.addFields('#input-title').addFields('#input-type');
     easyform.addFields(['#input-description','#input-price']);  //添加多项可以使用数组
