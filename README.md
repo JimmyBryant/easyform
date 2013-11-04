@@ -43,14 +43,14 @@ easyform
 ####校验完成后执行回调函数
     $('form').easyform({
         submitButton : '.submit-button',
-        callback : function(){alert('easy to validate form');}
+        success : function(){alert('easy to validate form');}
     });
-####某种特殊情况下，你想取消对某一项内容的校验
+####取消对对某些表单项的校验
     var easyform = $('form').easyform({
         fields : ['#input-email','.input-password','#input-title'] //使用element的id或者className
     });
     easyform.removeFields('#input-title');
-####又或者神马情况下，你想增加对某些内容的校验
+####增加对某些表单项的校验
     var easyform = $('form').easyform({
     });
     easyform.addFields({
