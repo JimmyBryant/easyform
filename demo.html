@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		.container{
+			width: 960px;
+			margin: 0 auto;
+			padding: 50px 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<form action="/demo.html">
+			<div>
+				<label>邮箱:</label><input type="text" id="email" name="email"/>
+			</div>
+			<div>
+				<label>密码:</label><input type="password" id="password" name="password"/>
+			</div>
+			<div>
+				<input type="submit" value="登录"/>
+			</div>
+
+		</form>
+	</div>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.easyform.js"></script>
+	<script type="text/javascript">
+
+	var easyform = $('form').easyform({
+			fields : {
+				'#email' : {
+					required : '请输入邮箱',
+					email : {
+						test : 'email',
+						message : 'email格式错误'
+					}
+				},
+				'#password' : {
+					required : '请输入密码'
+				}
+			},
+			success : function  (argument) {
+				alert('验证成功')
+			}
+		});
+	</script>
+</body>
+</html>
