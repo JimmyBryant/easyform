@@ -78,7 +78,7 @@
 				}
 			});
 		}
-
+		return self;
 	};
 
 	easyform.prototype.addFields = function(fields){
@@ -96,6 +96,7 @@
 			var field = fields;
 			oFields[field] = {};
 		}
+		return self;
 	};
 
 	var easyReg = {
@@ -118,7 +119,7 @@
 					if($.isPlainObject(config[item])){
 						var testItem = config[item];
 						test = typeof testItem.test=='string'?easyReg[testItem.test]:testItem.test;
-						message = testItem.message || '';
+						message = testItem.message || '数据格式错误';
 						if(!test.test(value)){
 							success = error(elem,message);
 							break;

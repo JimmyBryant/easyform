@@ -15,33 +15,33 @@ function fill(email,password){
 	$('#password').val(password);
 }
 
-test('基本校验', function(assert ) {
+test('基本校验', function() {
 	$('form').easyform({
 		fields : ['#email','#password']
 	});
 	$('form').trigger('submit');
-	assert.equal($('.error').length,2,'input1 has not passed');
+	equal($('.error').length,2,'input1 has not passed');
 });
 
-test('自定义错误信息以及email格式校验',function(assert){
+test('自定义错误信息以及email格式校验',function(){
 	var errMes = '邮箱不能为空',
 		emailMes = '邮箱格式不正确';
 	$('form').easyform({
 		fields : {
 			'#email' : {
-				error : errMes,
-				'validateEmail' :{
-					test : 'email',
-					message : emailMes,
+				"error" : errMes,
+				"validateEmail" : {
+					"test" : 'email',
+					"message" : emailMes
 				}
 			}
 		}
 	});
 	$('form').trigger('submit');
-	assert.equal($('#email')[0].easyformError.find('span').text(),errMes,errMes);
-	$('#email').text('some text');
+	equal($('#email')[0].easyformError.find('span').text(),errMes,errMes);
+	$('#email').val('some text');
 	$('form').trigger('submit');
-	assert.equal($('#email')[0].easyformError.find('span').text(),errMes,emailMes);
+	equal($('#email')[0].easyformError.find('span').text(),emailMes,emailMes);
 });
 test('指定button触发校验',function(){
 	var easyform = 	$('form').easyform({
@@ -71,7 +71,7 @@ test('校验成功执行回调函数',function(){
 				error : errMes,
 				'validateEmail' :{
 					test : 'email',
-					message : emailMes,
+					message : emailMes
 				}
 			}
 		},
