@@ -6,8 +6,8 @@ easyform
 ##Features
 * 基于jQuery，兼容各种浏览器
 * 使用简单，体积小
-* 只需修改js配置就可以实现更复杂的校验
-* 错误信息不会破坏原先的html结构
+* 只需修改js配置就可以实现复杂的表单校验
+* 错误提示不会破坏原先的html结构
 
 ##Usage
 
@@ -18,60 +18,63 @@ easyform
     $('form').easyform({
         fields : ['#input-email','.input-password'] //使用element的id或者className
     });
-在表单submit的时候easyform会校验这些Element的指是否为空
-####自己选择什么时候开始表单校验
+在表单submit的时候easyform会校验这些Element的value是否为空
+####也许你想在点击某个button的时候就校验表单，这个时候你需要指定submit button
     $('form').easyform({
         submitButton : '.submit-button'  //当点击button时校验表单
     });
-####你也可以进行数据类型校验并且指定错误提示信息
+####你也可以进行数据类型校验并且自定义错误提示信息
     $('form').easyform({
         fields : {
             '#input-password' : {
-                required : 'Email不能为空', //内容为空时显示的错误信息
+                error : 'Email不能为空', //内容为空时显示的错误信息
                 email : {
-                    test : 'email', //我们提供email校验
+                    test : 'email', //我们提供两种基本的数据格式校验，'email'、'url'
                     message : 'Email格式不正确'
                 }
             },
             '#input-password' : {
-                required : '请输入密码'，
-                mypassword : {  //自定义校验
-                    test : /^[\w]{8,16}$/,
+                error : '请输入密码'，
+                mypassword : {  
+                    test : /^[\w]{8,16}$/,  //同样你也可以使用正则完成特殊的数据格式校验
                     message : '密码长度为8-16'
                 }
             }
         }
     });
-####校验完成后执行回调函数
+####校验成功后执行回调函数
     $('form').easyform({
         submitButton : '.submit-button',
-        success : function(){alert('easy to validate form');}   //执行回调函数，完成后表单提交
+        success : function(){
+            alert('easy to validate form'); //校验成功后执行回调函数，表单仍然会提交
+        }
     });
     $('form').easyform({
         submitButton : '.submit-button',
-        success : function(){   //如果想要阻止表单提交,回调函数return false就可以了
+        success : function(){   //如果想要阻止表单提交,回调函数return false就可以
             alert('easy to validate form');
             return false;
         }
     });
 ####取消对对某些表单项的校验
     var easyform = $('form').easyform({
-        fields : ['#input-email','.input-password','#input-title'] //使用element的id或者className
+        fields : ['#input-email','#input-password','#input-title'] //使用element的id或者className
     });
     easyform.removeFields('#input-title');
+    easyform.removeFields(['#input-email','#input-password']);
 ####增加对某些表单项的校验
     var easyform = $('form').easyform({
     });
     easyform.addFields({
             '#input-email' : {
-                required : 'Email不能为空', //内容为空时显示的错误信息
+                error : 'Email不能为空', //内容为空时显示的错误信息
                 email : {
                     test : 'email', //我们提供email校验
                     message : 'Email格式不正确'
                 }
             },
             '#input-password' : {
-                required : '请输入密码'，
+                error : '请输入密码'，
                 mypassword : {  //自定义校验
                     test : /^[\w]{5,16}$/,
                     message : '密码长度为8-16'
@@ -79,5 +82,5 @@ easyform
 
             }
     });
-    easyform.addFields('#input-title').addFields('#input-type');
+    easyform.addFields('#input-title');
     easyform.addFields(['#input-description','#input-price']);  //添加多项可以使用数组
