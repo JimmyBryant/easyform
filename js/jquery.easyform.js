@@ -1,5 +1,6 @@
 /*
 	jquery.easyform.js v0.0.1
+	author : bitterg
 */
 
 (function($,window){
@@ -12,26 +13,30 @@
 		if($.isPlainObject(options)){	//options为object
 			submitButton = options.submitButton || null;
 			success = typeof options.success === 'function'?options.success : null;
-			if($.isArray(options.fields)){
+			if($.isArray(options.fields)){	//options.fields is array
 				$.each(options.fields,function(index,value){
 					fields[value] = {};
-				})
-			}else if($.isPlainObject(options.fields)){
+				});
+			}else if($.isPlainObject(options.fields)){	//options.fields is object
 				fields = options.fields;
+			}else if(typeof options.fields === 'string'){	//options.fields is string
+				fields[options.fields] = {};
 			}
 		}
 
 		this.fields = fields;
 
 		function submitHandle(event){
-			var flag = true
+			var flag1 = true,
+				flag2 = true;
 			$.each(fields,function(field,config){
 				if(!validate(field,config)){
-					flag = false;
+					flag1 = false;
 				}
 			});
-			flag&&success&&success();	//验证成功执行回调函数
-			return flag&&!success;
+			flag2 = flag1&&success?success()===false?false : true : true;
+
+			return flag1&&flag2;
 		}
 
 		form.each(function(){
@@ -44,26 +49,37 @@
 
 		$.each(fields, function(field,config) {	//onblur时校验表单元素
 			 $(field).bind('blur',function(){
-			 	validate(field,config);
+				validate(field,config);
 			 });
 		});
 
-	}
+	};
 
 	easyform.prototype.removeFields = function(fields){
 		var self = this,
-			oFields = self.fields;
+			oFields = self.fields,
+			field;
 		if($.isArray(fields)){
-			$.each(fields, function(index, val) {
-				if(oFields[val]){
-					delete oFields[val];
+			$.each(fields, function(index, field) {
+				if(oFields[field]){
+					recover(field);
 				}
 			});
 		}else if(typeof fields == 'string'){
-			delete oFields[fields];
+			field = fields;
+			recover(field);
 		}
 
-	}
+		function recover(field){
+			delete oFields[field];
+			$(field).removeClass('error').each(function(index,elem){
+				if(elem.easyformError){
+					elem.easyformError = null;
+				}
+			});
+		}
+
+	};
 
 	easyform.prototype.addFields = function(fields){
 		var self = this,
@@ -72,8 +88,15 @@
 			$.each(fields, function(field, config) {
 				oFields[field] = config;
 			});
+		}else if($.isArray(fields)){
+			$.each(fields, function(index, field) {
+				oFields[field] = {};
+			});
+		}else if(typeof fields === 'string'){
+			var field = fields;
+			oFields[field] = {};
 		}
-	}
+	};
 
 	var easyReg = {
 		email : /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/,
@@ -84,22 +107,22 @@
 
 		var	success = true,
 			test = null,
-			message = config.required||'内容不能为空';
+			message = config.error||'内容不能为空';
 
 		$(field).each(function(index,elem){
 			var value = $.trim($(elem).val());
-			if(value == ''){	//是否为空
+			if(value === ''){	//是否为空
 				success = error(elem,message);
 			}else{	//进行格式校验
 				for(var item in config){
 					if($.isPlainObject(config[item])){
-					 	var testItem = config[item];
-				 		test = typeof testItem.test=='string'?easyReg[testItem.test]:testItem.test;
-				 		message = testItem.message || '';
-					 	if(!test.test(value)){
-					 		success = error(elem,message);
-					 		break;
-					 	}
+						var testItem = config[item];
+						test = typeof testItem.test=='string'?easyReg[testItem.test]:testItem.test;
+						message = testItem.message || '';
+						if(!test.test(value)){
+							success = error(elem,message);
+							break;
+						}
 					}
 				}
 			}
@@ -107,7 +130,7 @@
 		});
 		return success;
 
-	}
+	};
 
 	var error = function(elem,message){
 		if(elem.easyformError){
@@ -121,15 +144,15 @@
 			err.fadeIn();
 		}
 		return false;
-	}
+	};
 
 	var removeError = function(elem){
 		if(elem.easyformError){
-			elem.easyformError.fadeOut(function(){$(this).remove()});
+			elem.easyformError.fadeOut(function(){$(this).remove();});
 			elem.easyformError = null;
 			$(elem).removeClass('error');
 		}
-	}
+	};
 
 	var setErrorStyle = function(elem,err){
 		var offset = $(elem).offset(),
@@ -139,20 +162,16 @@
 			height = $(elem).outerHeight(),
 			errColor = 'rgb(215, 115, 115)',
 			errStyle = 'display:none;position: absolute; width: 185px; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;left:'+(left+width+4)+'px;top:'+(top+(height-22)/2)+'px',
-			arrowStyle = 'position:absolute;width:0;height:0;line-height:0;border-width:5px;border-style:dashed solid dashed dashed;border-color:transparent '+errColor+' transparent transparent;top:6px;left:-10px;';
-			mesStyle = 'display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;'
+			arrowStyle = 'position:absolute;width:0;height:0;line-height:0;border-width:5px;border-style:dashed solid dashed dashed;border-color:transparent '+errColor+' transparent transparent;top:6px;left:-10px;',
+			mesStyle = 'display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;';
 
 		err.style.cssText = errStyle;
 		$(err).find('em')[0].style.cssText = arrowStyle;
 		$(err).find('span')[0].style.cssText = mesStyle;
-	}
-
-	var log = function(type,message){
-		window.console&&console[type](message);
-	}
+	};
 
 	$.fn.easyform = function(options){
 		return new easyform(this,options);
-	}
+	};
 
-})(this.jQuery,window)
+})(this.jQuery,window);

@@ -2,10 +2,12 @@ easyform
 ========
 
 一款轻量级的jQuery表单验证插件。
+
 ##Features
 * 基于jQuery，兼容各种浏览器
 * 使用简单，体积小
-* 通过修改配置可以实现多种功能
+* 只需修改js配置就可以实现更复杂的校验
+* 错误信息不会破坏原先的html结构
 
 ##Usage
 
@@ -43,7 +45,14 @@ easyform
 ####校验完成后执行回调函数
     $('form').easyform({
         submitButton : '.submit-button',
-        success : function(){alert('easy to validate form');}
+        success : function(){alert('easy to validate form');}   //执行回调函数，完成后表单提交
+    });
+    $('form').easyform({
+        submitButton : '.submit-button',
+        success : function(){   //如果想要阻止表单提交,回调函数return false就可以了
+            alert('easy to validate form');
+            return false;
+        }
     });
 ####取消对对某些表单项的校验
     var easyform = $('form').easyform({
