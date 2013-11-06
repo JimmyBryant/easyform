@@ -1,6 +1,6 @@
 {
   "name": "easyform",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "it's a form vlidation plugin base on jquery",
   "main": "Gruntfile.js",
   "directories": {

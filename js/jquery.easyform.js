@@ -1,6 +1,7 @@
 /*
-	jquery.easyform.js v0.0.1
+	jquery.easyform.js v0.1
 	author : bitterg
+	responsity : https://github.com/JimmyBryant/easyform
 */
 
 (function($,window){
@@ -162,7 +163,7 @@
 			width = $(elem).outerWidth(),
 			height = $(elem).outerHeight(),
 			errColor = 'rgb(215, 115, 115)',
-			errStyle = 'display:none;position: absolute; width: 185px; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;left:'+(left+width+4)+'px;top:'+(top+(height-22)/2)+'px',
+			errStyle = 'display:none;position: absolute; width: 125px; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;left:'+(left+width+4)+'px;top:'+(top+(height-22)/2)+'px',
 			arrowStyle = 'position:absolute;width:0;height:0;line-height:0;border-width:5px;border-style:dashed solid dashed dashed;border-color:transparent '+errColor+' transparent transparent;top:6px;left:-10px;',
 			mesStyle = 'display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;';
 
