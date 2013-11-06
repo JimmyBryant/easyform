@@ -30,28 +30,29 @@
 	<script type="text/javascript" src="js/jquery.easyform.js"></script>
 	<script type="text/javascript">
 
-	// var easyform = $('form').easyform({
-	// 		fields : {
-	// 			'#email' : {
-	// 				error : '请输入邮箱',
-	// 				email : {
-	// 					test : 'email',
-	// 					message : 'email格式错误'
-	// 				}
-	// 			},
-	// 			'#password' : {
-	// 				error : '请输入密码'
-	// 			}
-	// 		},
-	// 		success : function  (argument) {
-	// 			alert('验证成功');
-	// 			return false;
-	// 		}
-	// 	});
+		var easyform = $('form').easyform({
+			fields : {
+				'#email' : {
+					error : '请输入邮箱',
+					email : {
+						test : 'email',
+						message : 'email格式错误'
+					}
+				},
+				'#password' : {
+					error : '请输入密码',
+					length : {
+						test :/^[\w]{5,16}$/,
+						message : '密码长度5-16'
+					}
+				}
+			},
+			success : function  (argument) {
+				alert('验证成功');
+				return false;
+			}
+		});
 
-	$('form').easyform({
-		fields : ['#email','#password']
-	});
 	</script>
 </body>
 </html>
