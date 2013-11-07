@@ -26,14 +26,16 @@
 		}
 
 		this.fields = fields;
-
+		var self = this;
 		function submitHandle(event){
 			var flag1 = true,
 				flag2 = true;
-			$.each(fields,function(field,config){
-				if(!validate(field,config)){
-					flag1 = false;
-				}
+			$.each(self.fields,function(field,config){
+				$(field).each(function(index,elem){
+					if(!validate(elem,config)){
+						flag1 = false;
+					}
+				});
 			});
 			flag2 = flag1&&success?success()===false?false : true : true;
 
@@ -49,9 +51,12 @@
 		});
 
 		$.each(fields, function(field,config) {	//onblur时校验表单元素
-			 $(field).bind('blur',function(){
-				validate(field,config);
-			 });
+			$(field).each(function(index,elem){
+				elem.easyformBlur = true;
+				$(elem).bind('blur',function(){
+					this.easyformBlur&&validate(this,config);
+				});
+			});
 		});
 
 	};
@@ -75,6 +80,7 @@
 			delete oFields[field];
 			$(field).removeClass('error').each(function(index,elem){
 				removeError(elem);
+				elem.easyformBlur = false;
 			});
 		}
 		return self;
@@ -103,33 +109,32 @@
 		url : /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/
 	};
 
-	var validate = function(field,config){
+
+	var validate = function(elem,config){
 
 		var	success = true,
 			test = null,
-			message = config.error||'内容不能为空';
+			message = config.error||'内容不能为空',
+			value = $.trim($(elem).val());
 
-		$(field).each(function(index,elem){
-			var value = $.trim($(elem).val());
-			if(value === ''){	//是否为空
-				success = error(elem,message);
-			}else{	//进行格式校验
-				for(var item in config){
-					if($.isPlainObject(config[item])){
-						var testItem = config[item];
-						test = typeof testItem.test=='string'?easyReg[testItem.test]:testItem.test;
-						message = testItem.message || '数据格式错误';
-						if(!test.test(value)){
-							success = error(elem,message);
-							break;
-						}
+		if(value === ''){	//是否为空
+			success = error(elem,message);
+		}else{	//进行格式校验
+			for(var item in config){
+				if($.isPlainObject(config[item])){
+					var testItem = config[item];
+					test = typeof testItem.test=='string'?easyReg[testItem.test]:testItem.test;
+					message = testItem.message || '数据格式错误';
+					if(!test.test(value)){
+						success = error(elem,message);
+						break;
 					}
 				}
 			}
-			success&&removeError(elem);	//验证通过
-		});
-		return success;
+		}
 
+		success&&removeError(elem);	//验证通过
+		return success;
 	};
 
 	var error = function(elem,message){
