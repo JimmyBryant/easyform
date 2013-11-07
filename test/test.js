@@ -58,10 +58,13 @@ test('动态添加、删除校验项',function(){
 	equal($('.error').length,2,'添加校验项成功');
 	easyform.removeFields(['#password']);
 	equal($('.error').length,1,'被删除的校验项错误提示成功消失');
-	$('#password').trigger('blur')
+	$('#password').trigger('blur');
 	ok(!$('#password').hasClass('.error'),'被删除的校onblur也不会进行校验');
 	$('form').trigger('submit');
 	equal($('.error').length,1,'submit时被删除项也不会进行校验');
+	easyform.addFields(['#password']);
+	$('#password').trigger('blur');
+	equal($('.error').length,2,'addFields password,onblur时进行校验');
 });
 test('校验成功执行回调函数',function(){
 	var errMes = '邮箱不能为空',

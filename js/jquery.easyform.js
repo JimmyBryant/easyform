@@ -50,14 +50,7 @@
 			}
 		});
 
-		$.each(fields, function(field,config) {	//onblur时校验表单元素
-			$(field).each(function(index,elem){
-				elem.easyformBlur = true;
-				$(elem).bind('blur',function(){
-					this.easyformBlur&&validate(this,config);
-				});
-			});
-		});
+		bindBlurEvent(fields);	//bind blur event
 
 	};
 
@@ -88,20 +81,33 @@
 
 	easyform.prototype.addFields = function(fields){
 		var self = this,
-			oFields = self.fields;
+			newFields = {};
 		if($.isPlainObject(fields)){
-			$.each(fields, function(field, config) {
-				oFields[field] = config;
-			});
+			newFields = fields;
 		}else if($.isArray(fields)){
-			$.each(fields, function(index, field) {
-				oFields[field] = {};
+			$.each(fields, function(index,field) {
+				newFields[field] = {};
 			});
 		}else if(typeof fields === 'string'){
 			var field = fields;
-			oFields[field] = {};
+			newFields[field] = {};
 		}
+		bindBlurEvent(newFields);
+		$.extend(self.fields, newFields);
 		return self;
+	};
+
+	var bindBlurEvent = function(fields){
+		$.each(fields, function(field,config) {	//onblur时校验表单元素
+			$(field).each(function(index,elem){
+				if(elem.easyformBlur)
+					return;
+				elem.easyformBlur = true;
+				$(elem).bind('blur',function(){
+					this.easyformBlur&&validate(this,config);
+				});
+			});
+		});
 	};
 
 	var easyReg = {
