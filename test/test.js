@@ -3,7 +3,7 @@ module('easyform validate',{
     fixture('<input type="text" id="email" name="email"/><input type="password" id="password"/><input id="submit" type="button" value="登录"/>');
   },
   teardown: function() {
-
+  	$('.easyform-error').remove();	//移除错误提示信息
   }
 });
 
@@ -57,6 +57,7 @@ test('动态添加、删除校验项',function(){
 	$('form').trigger('submit');
 	equal($('.error').length,2,'添加校验项成功');
 	easyform.removeFields(['#password']);
+	equal($('.error').length,1,'被删除的校验项错误提示成功消失');
 	$('form').trigger('submit');
 	equal($('.error').length,1,'删除校验项成功');
 });
