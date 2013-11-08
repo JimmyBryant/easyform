@@ -162,9 +162,9 @@
 			var err = $('<div class="easyform-error"></div>'),
 				errColor = 'rgb(215, 115, 115)',
 				errWidth = 135,
-				errStyle = 'display:none;position: absolute; width: '+errWidth+'px; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;',
+				errStyle = 'display:none;position: absolute; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;',
 				arrowStyle = 'position:absolute;width:0;height:0;line-height:0;border-width:5px;border-style:dashed solid dashed dashed;border-color:transparent '+errColor+' transparent transparent;top:6px;left:-10px;',
-				mesStyle = 'display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;';
+				mesStyle = 'display: block; width: '+errWidth+'px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;';
 
 			err.html('<em style="'+arrowStyle+'"></em><span class="easyform-error-message" style="'+mesStyle+'">'+message+'</span>').appendTo($('body'));
 			elem.easyformError = err;
