@@ -12,14 +12,14 @@ easyform
 
 ##Usage
 
-####首先你得在页面中引用jQuery和jquery.easyform.js
+####首先你得在页面中引用jquery和jquery.easyform.js
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/jquery.easyform.js"></script>
 ####最基本的用法
     $('form').easyform({
-        fields : ['#input-email','.input-password'] //使用element的id或者className
+        fields : ['#input-email','.input-password'] //表单的id或者className，只要jquery选择器支持就行
     });
-在表单submit的时候easyform会校验这些Element的value是否为空
+提交表单的时候easyform会校验这些表单元素的value是否为空
 ####也许你想在点击某个button的时候就校验表单，这个时候你需要指定submit button
     $('form').easyform({
         submitButton : '.submit-button'  //当点击button时校验表单
@@ -57,7 +57,7 @@ easyform
             return false;
         }
     });
-####取消对对某些表单项的校验
+####取消对某些表单项的校验
     var easyform = $('form').easyform({
         fields : ['#input-email','#input-password','#input-title'] //使用element的id或者className
     });
