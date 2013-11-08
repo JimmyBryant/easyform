@@ -51,7 +51,7 @@
 		});
 
 		bindBlurEvent(fields);	//bind blur event
-
+		bindResizeEvent();	//reset style of error message when window resize
 	};
 
 	easyform.prototype.removeFields = function(fields){
@@ -110,6 +110,18 @@
 		});
 	};
 
+	var bindResizeEvent = function(){
+		var rtimer = null;
+		$(window).bind('resize',function(){
+			clearTimeout(rtimer);
+			rtimer = setTimeout(function(){
+				$('.error').each(function(index,elem) {
+					setErrorPosition(elem);
+				});
+			},200);
+		});
+	};
+
 	var easyReg = {
 		email : /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/,
 		url : /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/
@@ -147,11 +159,18 @@
 		if(elem.easyformError){
 			elem.easyformError.find('.easyform-error-message').text(message);
 		}else{
-			var err = $('<div class="easyform-error"></div>');
-			err.html('<em></em><span class="easyform-error-message">'+message+'</span>').appendTo($('body'));
+			var err = $('<div class="easyform-error"></div>'),
+				errColor = 'rgb(215, 115, 115)',
+				errWidth = 135,
+				errStyle = 'display:none;position: absolute; width: '+errWidth+'px; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;',
+				arrowStyle = 'position:absolute;width:0;height:0;line-height:0;border-width:5px;border-style:dashed solid dashed dashed;border-color:transparent '+errColor+' transparent transparent;top:6px;left:-10px;',
+				mesStyle = 'display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;';
+
+			err.html('<em style="'+arrowStyle+'"></em><span class="easyform-error-message" style="'+mesStyle+'">'+message+'</span>').appendTo($('body'));
 			elem.easyformError = err;
 			$(elem).addClass('error');
-			setErrorStyle(elem,err[0]);
+			err[0].style.cssText = errStyle;
+			setErrorPosition(elem);
 			err.fadeIn();
 		}
 		return false;
@@ -165,21 +184,21 @@
 		}
 	};
 
-	var setErrorStyle = function(elem,err){
+	var setErrorPosition = function(elem){
+		var easyformError = elem.easyformError;
+		if(!easyformError){
+			return false;
+		}
 		var offset = $(elem).offset(),
 			top = offset.top,
 			left = offset.left,
 			width = $(elem).outerWidth(),
-			height = $(elem).outerHeight(),
-			errColor = 'rgb(215, 115, 115)',
-			errWidth = 135,
-			errStyle = 'display:none;position: absolute; width: '+errWidth+'px; background-color:'+errColor+'; color: #FFF; padding: 2px 8px; font-size: 13px; border-radius: 4px; line-height: 18px;left:'+(left+width+4)+'px;top:'+(top+(height-22)/2)+'px',
-			arrowStyle = 'position:absolute;width:0;height:0;line-height:0;border-width:5px;border-style:dashed solid dashed dashed;border-color:transparent '+errColor+' transparent transparent;top:6px;left:-10px;',
-			mesStyle = 'display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;';
+			height = $(elem).outerHeight();
 
-		err.style.cssText = errStyle;
-		$(err).find('em')[0].style.cssText = arrowStyle;
-		$(err).find('span')[0].style.cssText = mesStyle;
+		easyformError.css({
+			top :(top+(height-22)/2)+'px',
+			left : (left+width+4)+'px'
+		});
 	};
 
 	$.fn.easyform = function(options){
