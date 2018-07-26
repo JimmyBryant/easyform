@@ -3,28 +3,28 @@ easyform
 
 一款轻量级的jQuery表单验证插件。
 
-##Features
+## Features  
 * 基于jQuery，兼容各种浏览器
 * 体积小,.min文件不到3K
 * 修改js配置就可以实现复杂的表单校验
 * 错误提示信息不会破坏表单结构
 * 支持回调函数、异步提交表单
 
-##Usage
+## Usage
 
-####首先你得在页面中引用jquery和jquery.easyform.js
+#### 首先你得在页面中引用jquery和jquery.easyform.js  
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="js/jquery.easyform.js"></script>
-####最基本的用法
+#### 最基本的用法
     $('form').easyform({
         fields : ['#input-email','.input-password'] //表单的id或者className，只要jquery选择器支持就行
     });
 提交表单的时候easyform会校验这些表单元素的value是否为空
-####也许你想在点击某个button的时候就校验表单，这个时候你需要指定submit button
+#### 也许你想在点击某个button的时候就校验表单，这个时候你需要指定submit button
     $('form').easyform({
         submitButton : '.submit-button'  //当点击button时校验表单
     });
-####你也可以进行数据类型校验并且自定义错误提示信息
+#### 你也可以进行数据类型校验并且自定义错误提示信息
     $('form').easyform({
         fields : {
             '#input-password' : {
@@ -43,7 +43,7 @@ easyform
             }
         }
     });
-####校验成功后执行回调函数
+#### 校验成功后执行回调函数
     $('form').easyform({
         submitButton : '.submit-button',
         success : function(){
@@ -57,13 +57,13 @@ easyform
             return false;
         }
     });
-####取消对某些表单项的校验
+#### 取消对某些表单项的校验
     var easyform = $('form').easyform({
         fields : ['#input-email','#input-password','#input-title'] //使用element的id或者className
     });
     easyform.removeFields('#input-title');
     easyform.removeFields(['#input-email','#input-password']);
-####增加对某些表单项的校验
+#### 增加对某些表单项的校验
     var easyform = $('form').easyform({
     });
     easyform.addFields({
